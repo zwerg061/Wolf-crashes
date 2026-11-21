@@ -10,6 +10,10 @@ Clientseitiger Stabilitäts-Fix für Minecraft **Forge 1.19.2** gegen die Abstü
 Spielmodus **„Wolf"** – plus ein Diagnose-Fenster im Stil von *Crash Assistant*, das nach
 einem Crash beim nächsten Start die Ursache erklärt.
 
+**Repository:** https://github.com/zwerg061/Wolf-crashes ·
+[Alle Releases](https://github.com/zwerg061/Wolf-crashes/releases) ·
+Die alte Adresse `github.com/zwerg061/Wolf-craches` leitet automatisch hierher weiter.
+
 ## Download
 
 | Datei | Größe | SHA-256 |
