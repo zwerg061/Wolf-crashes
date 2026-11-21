@@ -3,7 +3,7 @@
 [![Minecraft](https://img.shields.io/badge/Minecraft-1.19.2-62b47a?style=flat-square)](https://www.minecraft.net/)
 [![Forge](https://img.shields.io/badge/Forge-43.x-f1a13b?style=flat-square)](https://files.minecraftforge.net/)
 [![Seite](https://img.shields.io/badge/Seite-Client-4a90d9?style=flat-square)](#wichtig-clientseitig)
-[![Version](https://img.shields.io/badge/Version-1.3.0-blue?style=flat-square)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/Version-1.3.1-blue?style=flat-square)](CHANGELOG.md)
 [![Lizenz](https://img.shields.io/badge/Lizenz-MIT-green?style=flat-square)](LICENSE)
 
 Clientseitiger Stabilitäts-Fix für Minecraft **Forge 1.19.2** gegen die Abstürze im
@@ -18,15 +18,15 @@ Die alte Adresse `github.com/zwerg061/Wolf-craches` leitet automatisch hierher w
 
 | Datei | Größe | SHA-256 |
 | --- | --- | --- |
-| **[creach-report-fix-1.3.0-client.jar](releases/creach-report-fix-1.3.0-client.jar)** | 45 168 B | `7D8CF3CD…579E6E` |
+| **[creach-report-fix-1.3.1-client.jar](releases/creach-report-fix-1.3.1-client.jar)** | 47 702 B | `806B4FAB…F00553` |
 
 Die vollständige Prüfsumme liegt daneben in
-[`releases/creach-report-fix-1.3.0-client.jar.sha256`](releases/creach-report-fix-1.3.0-client.jar.sha256).
+[`releases/creach-report-fix-1.3.1-client.jar.sha256`](releases/creach-report-fix-1.3.1-client.jar.sha256).
 
 Installation in drei Schritten:
 
 1. **Minecraft Forge 1.19.2** (Version 43.x) installieren.
-2. Alte Versionen aus `.minecraft/mods` löschen (z. B. `creach-report-fix-1.2.0-client.jar`).
+2. Alte Versionen aus `.minecraft/mods` löschen (z. B. `creach-report-fix-1.3.0-client.jar`).
 3. Die JAR nach `.minecraft/mods` kopieren – fertig.
 
 > Beim Aktualisieren immer die alte JAR entfernen, damit nur **eine** Version im `mods`-Ordner liegt.
@@ -37,7 +37,7 @@ Installation in drei Schritten:
 | --- | --- |
 | **ModelBakery** | Iteriert eine stabile Kopie des Item-Registry-KeySets statt der Live-Sicht – behebt den häufigsten Crash (`ConcurrentModificationException` in `ModelBakery.<init>`) |
 | **MrCrayfish's Gun Mod** | Erstellt eine Kopie der Item-Registry, damit kein `ConcurrentModificationException` beim Meta-Laden entsteht |
-| **CGM-Werkbank** | Repariert ein fehlendes Rezept-Ergebnis (`currentItem`/`displayStack` = `null`) in `WorkbenchScreen.m_7286_`/`m_6305_` mit `ItemStack.EMPTY`; falls nötig wird der Screen mit Chat-Hinweis sicher geschlossen |
+| **CGM-Werkbank** | Entfernt defekte Werkbank-Rezepte aus den Tab-Listen, setzt ein fehlendes Ergebnis auf das erste gültige Rezept-Item (oder `ItemStack.EMPTY`) und sichert `currentItem.m_41786_()` ab – die GUI bleibt offen und benutzbar. `setScreen(null)` nur noch als Notanker bei unerwarteter Exception. |
 | **FramedBlocks** | Fängt einen noch nicht initialisierten `baseModel` ab, statt eine `NullPointerException` zu werfen |
 | **Nebenläufigkeit** | Begrenzt die Hintergrund-Threads (`max.bg.threads`, ForkJoinPool) auf ¼ der CPU-Kerne, maximal 3 |
 | **ModernFix** | Deaktiviert die zwei Mixins, die Reload-Crashes verursachen (`dedicated_reload_executor`, `thread_priorities`) – nur wenn ModernFix installiert ist |
@@ -95,7 +95,8 @@ Grundlage sind **59 eingesandte Client-Crash-Reports** aus der Wolf-Instanz
 
 Alle 59 Reports laufen durch den Analyzer (59/59 ohne Fehlschlag). Der neue Fall wird
 vom `CrashAnalyzer` explizit als MrCrayfish's Gun Mod bzw. geänderte Werkbank-Rezepte
-im Modpack benannt.
+im Modpack benannt. Seit 1.3.1 bleibt die Werkbank-GUI dabei offen – 1.3.0 hatte sie
+nach der Reparatur versehentlich sofort geschlossen.
 
 ## Selbst bauen
 

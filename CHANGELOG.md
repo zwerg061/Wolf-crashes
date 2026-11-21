@@ -4,6 +4,34 @@ Alle wichtigen Änderungen an diesem Projekt. Format orientiert sich an
 [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), Versionierung nach
 [Semantic Versioning](https://semver.org/lang/de/).
 
+## [1.3.1] – 2026-11-21
+
+Nachbesserung zu 1.3.0: Die Werkbank-GUI bleibt jetzt offen und voll benutzbar.
+
+### Behoben
+
+* 1.3.0 hatte den Screen nach dem Abfangen des `currentItem`-Crash sofort wieder
+  geschlossen (`setScreen(null)`), sodass man die `cgm:workbench` gar nicht öffnen
+  konnte. Ursache war eine Field-Suche über `Class.forName` mit dem falschen
+  ClassLoader – sie lieferte kein Feld, sodass der Schließ-Fallback griff.
+* Die Field-Suche läuft jetzt über `instance.getClass()` und damit immer gegen die
+  tatsächlich geladene CGM-Klasse.
+
+### Geändert
+
+* Dekompilierte Feldnamen von `cgm-forge-1.19.2-1.3.7.jar` berücksichtigt: Es gibt
+  **kein** `filteredRecipes` und kein `currentItem`-Feld. Die Rezepte liegen in
+  `WorkbenchScreen.tabs` → `WorkbenchScreen$Tab.items`; `currentItem` ist nur eine
+  lokale Variable aus `getfield displayStack`.
+* `CgmWorkbenchScreenMixin` bereinigt in `init`, `render` (`m_6305_`) und `renderBg`
+  (`m_7286_`) alle Rezepteinträge mit `null`-Ergebnis aus den Tab-Listen, setzt ein
+  fehlendes `displayStack` auf das erste gültige Rezept-Item bzw. `ItemStack.EMPTY`
+  und fängt `loadItem(int)` bei defekten/out-of-range Rezepten ab.
+* `currentItem.m_41786_()` wird weiterhin null-sicher abgefangen – ohne Screen-Close.
+* `setScreen(null)` ist jetzt der allerletzte Notanker und läuft nur noch, wenn trotz
+  Reparatur eine unerwartete Exception fliegt.
+* Version in `gradle.properties` auf 1.3.1 erhöht.
+
 ## [1.3.0] – 2026-11-21
 
 Neuer Client-Crash aus der Instanz `Wolf 3 CurseForge Profil-1.14_` beim Öffnen der
@@ -77,5 +105,6 @@ und die ModelBakery-/Gun-Mod-Guards dadurch nie aktiv wurden.
 Nicht mehr dokumentiert. Die JARs liegen unter `releases/legacy/` und sind **nicht** zu
 verwenden – dort fehlen die meisten Fixes, weil die Mixins nicht registriert waren.
 
+[1.3.1]: https://github.com/zwerg061/Wolf-crashes/compare/v1.3.0...v1.3.1
 [1.3.0]: https://github.com/zwerg061/Wolf-crashes/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/zwerg061/Wolf-crashes/compare/c68ed3d...48cfcdb
