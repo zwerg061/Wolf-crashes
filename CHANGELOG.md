@@ -4,6 +4,31 @@ Alle wichtigen Änderungen an diesem Projekt. Format orientiert sich an
 [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), Versionierung nach
 [Semantic Versioning](https://semver.org/lang/de/).
 
+## [1.3.0] – 2026-11-21
+
+Neuer Client-Crash aus der Instanz `Wolf 3 CurseForge Profil-1.14_` beim Öffnen der
+Waffen-Werkbank (`cgm:workbench`) wird abgefangen und diagnostiziert.
+
+### Behoben
+
+* `NullPointerException: Cannot invoke "ItemStack.m_41786_()" because "currentItem" is null`
+  in `com.mrcrayfish.guns.client.screen.WorkbenchScreen.m_7286_` (Zeile 407; called from
+  `m_6305_`). Der neue `CgmWorkbenchScreenMixin` (`require = 0`) prüft bei `init`, `render`
+  und `renderBg`, ob das Rezept-Ergebnis (`displayStack` → lokale Variable `currentItem`)
+  null ist, und setzt es auf `ItemStack.EMPTY`. Zwei Redirects sichern zusätzlich den
+  Field-Read und `ItemStack#getHoverName()` ab. Falls die Reparatur nicht möglich ist,
+  wird der Screen über `Minecraft.getInstance().setScreen(null)` geschlossen und der
+  Hinweis „[CreachReportFix] Fehlerhaftes Werkbank-Rezept im Modpack abgefangen –
+  Crash verhindert." im Chat ausgegeben.
+
+### Hinzugefügt
+
+* `CrashAnalyzer`-Regel für `WorkbenchScreen.m_7286_` / `"currentItem" is null`: benennt
+  MrCrayfish's Gun Mod (`cgm`) sowie geänderte/entfernte Werkbank-Rezepte bzw. Addons
+  im Modpack als Ursache.
+* Die Mod-Version steht jetzt in `gradle.properties`; `./gradlew build` erzeugt direkt
+  `creach-report-fix-1.3.0-client.jar`.
+
 ## [1.2.0] – 2026-11-17
 
 Diese Version behebt die beiden häufigsten Crash-Ursachen aus den eingesandten Reports
@@ -52,4 +77,5 @@ und die ModelBakery-/Gun-Mod-Guards dadurch nie aktiv wurden.
 Nicht mehr dokumentiert. Die JARs liegen unter `releases/legacy/` und sind **nicht** zu
 verwenden – dort fehlen die meisten Fixes, weil die Mixins nicht registriert waren.
 
-[1.2.0]: https://github.com/zwerg061/Wolf-craches/compare/c68ed3d...48cfcdb
+[1.3.0]: https://github.com/zwerg061/Wolf-crashes/compare/v1.2.0...v1.3.0
+[1.2.0]: https://github.com/zwerg061/Wolf-crashes/compare/c68ed3d...48cfcdb

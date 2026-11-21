@@ -211,6 +211,20 @@ public final class CrashAnalyzer {
             }
         }
 
+        // CGM workbench: a modpack with removed/changed gun recipes (or a CGM
+        // addon) leaves currentItem/displayStack null while rendering the screen.
+        if ((text.contains("workbenchescreen") || text.contains("m_7286_"))
+                && (text.contains("currentitem") || text.contains("displaystack"))) {
+            issues.add(new DetectedIssue(
+                    "MrCrayfish's Gun Mod: Werkbank-Rezept ungültig",
+                    "Beim Rendern der Waffen-Werkbank (cgm:workbench) ist das Ergebnis-Item des "
+                            + "Rezepts null. Ursache sind geänderte oder entfernte Werkbank-Rezepte "
+                            + "im Modpack bzw. ein CGM-Addon. Creach Report Fix setzt das Item auf "
+                            + "'leer' und schließt den Screen im Notfall. MrCrayfish's Gun Mod "
+                            + "(cgm) und Framework aktualisieren oder die Rezepte/Addons im Modpack "
+                            + "prüfen." + suspectHint(suspect)));
+        }
+
         if (text.contains("worldschematic") && text.contains("classcastexception")) {
             issues.add(new DetectedIssue(
                     "Litematica/Forgematica passt nicht zu einer anderen Mod",

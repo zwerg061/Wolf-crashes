@@ -14,7 +14,8 @@ buildscript {
 apply plugin: 'net.minecraftforge.gradle'
 
 group = 'de.wolfmod'
-version = '1.2.0'
+// Version ist die einzige Wahrheitsquelle in gradle.properties
+version = project.property('version')
 
 base {
     archivesName = 'creach-report-fix'
@@ -54,6 +55,7 @@ dependencies {
 }
 
 jar {
+    archiveClassifier = 'client'
     manifest {
         attributes([
                 'Specification-Title'      : 'creachreportfix',
